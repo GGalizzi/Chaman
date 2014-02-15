@@ -2,7 +2,7 @@
 #include "Tile.h"
 
 
-Tile::Tile() {
+Tile::Tile() : hasMob(nullptr){
   sprite_.setTexture(*Game::tex);
   sprite_.setTextureRect(sf::IntRect(Game::SpriteSize*14, Game::SpriteSize*2, Game::SpriteSize, Game::SpriteSize));
 }

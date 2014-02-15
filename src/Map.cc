@@ -33,3 +33,12 @@ bool Map::isBlocked(int x, int y) const {
   const Tile& t = tiles_[x+y*width_];
   return t.blocks;
 }
+
+std::shared_ptr<Entity> Map::hasMob(int x, int y) {
+  const Tile& t = tiles_[x+y*width_];
+  return t.hasMob;
+}
+
+void Map::hasMob(int x, int y, std::shared_ptr<Entity> has) {
+  tiles_[x+y*width_].hasMob = has;
+}

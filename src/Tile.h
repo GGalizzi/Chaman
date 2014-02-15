@@ -5,6 +5,9 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 
+
+struct Entity;
+
 struct Tile {
   public:
     Tile();
@@ -14,6 +17,7 @@ struct Tile {
     bool isBlocked();
 
     bool blocks;
+    std::shared_ptr<Entity> hasMob;
 
   private:
     int x_;
