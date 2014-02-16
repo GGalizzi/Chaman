@@ -11,7 +11,7 @@ void Entity::setSprite(int sprite_x, int sprite_y) {
 }
 
 //Constructor with MOB
-Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, Mob* mob) : mob_(mob), x_(posx), y_(posy) {
+Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, Mob* mob) : cMob(mob),cItem(nullptr), x_(posx), y_(posy) {
   setSprite(sprite_x, sprite_y);
 }
 
@@ -19,24 +19,70 @@ Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, Mob* mob) : mob_(
 void Entity::move(int x, int y, Map* const& map) {
   int dx = x_+x;
   int dy = y_+y;
-  std::shared_ptr<Entity> mobToAttack = map->hasMob(dx,dy);
-  if (!map->isBlocked(dx,dy) && mobToAttack == nullptr) {
+  int canMove = false;
+  int isMob = false;
+  std::shared_ptr<Entity> hasEntity = map->hasEntity(dx,dy);
+
+  if (!hasEntity) {
+    canMove = true;
+  }
+  else {
+    if(hasEntity->cMob) {
+      canMove = false;
+      isMob = true;
+    }
+    else {
+      canMove = true;
+    }
+  }
+  if (!map->isBlocked(dx,dy) && canMove && !isMob) {
+
+    map->hasEntity(x_,y_,nullptr);
     x_ += x;
     y_ += y;
+    map->hasEntity(x_,y_,shared_from_this());
 
-    map->hasMob(x_-x,y_-y,nullptr);
-    map->hasMob(x_,y_,mobToAttack);
     sprite_.move(Game::SpriteSize*x, Game::SpriteSize*y);
   }
 
-  else if(mobToAttack) {
+  else if(isMob) {
     //Attack, and if it dies, remove mob component. Replace sprite graphic with dead corpse.
-    if (mob_->attack(mobToAttack->mob_)) {
-      mobToAttack->sprite_.setTextureRect( sf::IntRect(Game::SpriteSize*5, Game::SpriteSize*2, Game::SpriteSize, Game::SpriteSize) );
-      mobToAttack->sprite_.setColor(sf::Color::Red);
+    if (cMob && cMob->attack(hasEntity->cMob)) {
+      //If it dies//
+      
+      hasEntity->cMob.reset();
 
+      hasEntity->cItem.reset(new Item());
+      hasEntity->sprite_.setTextureRect( sf::IntRect(Game::SpriteSize*5, Game::SpriteSize*2, Game::SpriteSize, Game::SpriteSize) );
+      hasEntity->sprite_.setColor(sf::Color::Red);
     }
   }
+}
+
+void Entity::moveTowards(Entity* const& target, Map* const& map) {
+  int cx = x_ - target->x_;
+  int cy = y_ - target->y_;
+
+  int dx,dy;
+
+  if(cx < 0)
+    dx = 1;
+  else
+    dx = -1;
+
+  if(cy < 0)
+    dy = 1;
+  else
+    dy = -1;
+
+  move(dx,dy, map);
+}
+
+bool Entity::isMob() {
+  if (cMob)
+    return true;
+  else
+    return false;
 }
 
 sf::Sprite Entity::getSprite() {

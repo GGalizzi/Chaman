@@ -3,6 +3,7 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include "Mob.h"
+#include "Item.h"
 #include "Map.h"
 
 struct Entity : std::enable_shared_from_this<Entity> {
@@ -10,14 +11,18 @@ struct Entity : std::enable_shared_from_this<Entity> {
     Entity();
     Entity(int sprite_x, int sprite_y, int posx, int posy, Mob*);
     void move(int,int, Map* const&);
+    void moveTowards(Entity* const&, Map* const&);
+
+    bool isMob();
 
 
     sf::Sprite getSprite();
-
+    //Components
+    std::shared_ptr<Mob> cMob;
+    std::shared_ptr<Item> cItem;
   private:
 
 
-    std::shared_ptr<Mob> mob_;
     void setSprite(int,int);
     sf::Sprite sprite_;
     int x_;

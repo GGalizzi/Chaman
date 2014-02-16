@@ -15,8 +15,8 @@ struct Map {
     //Checks if tile in given coords blocks passage.
     bool isBlocked(int,int) const;
     //Checks or sets the tile in the given coordinates if it has a mob or not
-    std::shared_ptr<Entity> hasMob(int,int);
-    void hasMob(int,int,std::shared_ptr<Entity>);
+    std::shared_ptr<Entity> hasEntity(int,int);
+    void hasEntity(int,int,std::shared_ptr<Entity>);
 
   private:
     Tile* tiles_;

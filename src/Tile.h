@@ -17,7 +17,7 @@ struct Tile {
     bool isBlocked();
 
     bool blocks;
-    std::shared_ptr<Entity> hasMob;
+    std::shared_ptr<Entity> hasEntity;
 
   private:
     int x_;

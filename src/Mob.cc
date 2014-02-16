@@ -13,3 +13,7 @@ bool Mob::attack(std::shared_ptr<Mob> defender) {
   }
   return false;
 }
+
+std::string Mob::hpToString() {
+  return "HP: "+std::to_string(curhp_) +"/"+std::to_string(maxhp_);
+}

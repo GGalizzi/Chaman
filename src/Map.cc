@@ -2,19 +2,22 @@
 #include "Game.h"
 
 Map::Map() {
-  width_ = Game::WindowWidth/Game::SpriteSize;
-  height_ = Game::WindowHeight/Game::SpriteSize;
+  width_ = (Game::WindowWidth-200)/Game::SpriteSize;
+  height_ = (Game::WindowHeight-100)/Game::SpriteSize;
 
   tiles_ = new Tile[width_*height_];
 
   for (int x = 0; x < width_; x++)
     for (int y = 0; y < height_; y++) {
       if(y == 0 || y == height_-1 || x == 0 || x == width_-1) {
-        tiles_[x+y*width_].setSprite(3,2);
+        tiles_[x+y*width_].setSprite(11,13);
         tiles_[x+y*width_].blocks = true;
       }
-      else
+      else {
         tiles_[x+y*width_].blocks = false;
+      }
+
+      tiles_[x+y*width_].hasEntity = nullptr;
     }
 }
 
@@ -34,11 +37,11 @@ bool Map::isBlocked(int x, int y) const {
   return t.blocks;
 }
 
-std::shared_ptr<Entity> Map::hasMob(int x, int y) {
+std::shared_ptr<Entity> Map::hasEntity(int x, int y) {
   const Tile& t = tiles_[x+y*width_];
-  return t.hasMob;
+  return t.hasEntity;
 }
 
-void Map::hasMob(int x, int y, std::shared_ptr<Entity> has) {
-  tiles_[x+y*width_].hasMob = has;
+void Map::hasEntity(int x, int y, std::shared_ptr<Entity> has) {
+  tiles_[x+y*width_].hasEntity = has;
 }
