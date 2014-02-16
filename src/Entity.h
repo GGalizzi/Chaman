@@ -9,6 +9,8 @@
 struct Entity : std::enable_shared_from_this<Entity> {
   public:
     Entity();
+
+    Entity(int sprite_x, int sprite_y, int posx, int posy);
     Entity(int sprite_x, int sprite_y, int posx, int posy, Mob*);
     void move(int,int, Map* const&);
     void moveTowards(Entity* const&, Map* const&);

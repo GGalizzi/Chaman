@@ -10,6 +10,10 @@ void Entity::setSprite(int sprite_x, int sprite_y) {
 
 }
 
+//Constructor with no component (i.e cursor_)
+Entity::Entity(int sprite_x, int sprite_y, int posx, int posy) : cMob(nullptr), cItem(nullptr), x_(posx), y_(posy) {
+  setSprite(sprite_x, sprite_y);
+}
 //Constructor with MOB
 Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, Mob* mob) : cMob(mob),cItem(nullptr), x_(posx), y_(posy) {
   setSprite(sprite_x, sprite_y);
@@ -23,7 +27,7 @@ void Entity::move(int x, int y, Map* const& map) {
   int isMob = false;
   std::shared_ptr<Entity> hasEntity = map->hasEntity(dx,dy);
 
-  if (!hasEntity) {
+  if (!hasEntity || Game::state == STATE::LOOK) {
     canMove = true;
   }
   else {
@@ -35,7 +39,7 @@ void Entity::move(int x, int y, Map* const& map) {
       canMove = true;
     }
   }
-  if (!map->isBlocked(dx,dy) && canMove && !isMob) {
+  if ((!map->isBlocked(dx,dy) && canMove && !isMob) || Game::state == STATE::LOOK) {
 
     map->hasEntity(x_,y_,nullptr);
     x_ += x;

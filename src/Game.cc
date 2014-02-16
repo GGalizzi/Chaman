@@ -1,8 +1,11 @@
 #include "Game.h"
 
+
 int Game::WindowHeight{720};
 int Game::WindowWidth{1024};
 int Game::SpriteSize{11};
+
+STATE Game::state = STATE::PLAY;
 
 std::unique_ptr<sf::Texture> Game::tex(new sf::Texture);
 std::unique_ptr<sf::Font> Game::fon(new sf::Font);
@@ -11,6 +14,7 @@ Game::Game() :
   window_(sf::VideoMode(WindowWidth,WindowHeight), "SFML Rogue"),
   map_(new Map),
   player_(new Entity(0,4, 1,1, new Mob(120,5,2))),
+  cursor_(new Entity(9,0, 1,1)),
   wait_(false)
   {
     fon->loadFromFile("Sansation.ttf");
@@ -78,6 +82,8 @@ void Game::run() {
     }
 
     window_.draw(player_->getSprite());
+    if(state == STATE::LOOK)
+      window_.draw(cursor_->getSprite());
     hpText_.setString(player_->cMob->hpToString());
     window_.draw(hpText_);
     window_.display();
@@ -86,41 +92,55 @@ void Game::run() {
 
 bool Game::handleInput(sf::Keyboard::Key key) {
   bool wait = true;
+  std::shared_ptr<Entity> inControl;
+  if(state == STATE::PLAY)
+    inControl = player_;
+  else if(state == STATE::LOOK)
+    inControl = cursor_;
   if (key == sf::Keyboard::Q && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
     window_.close();
   if (key == sf::Keyboard::Numpad8) {
-    player_->move(0,-1, map_.get());
+    inControl->move(0,-1, map_.get());
     wait = false;
   }
   if (key == sf::Keyboard::Numpad2) {
-    player_->move(0,1, map_.get());
+    inControl->move(0,1, map_.get());
     wait = false;
   }
   if (key == sf::Keyboard::Numpad4) {
-    player_->move(-1,0, map_.get());
+    inControl->move(-1,0, map_.get());
     wait = false;
   }
   if (key == sf::Keyboard::Numpad6) {
-    player_->move(1,0, map_.get());
+    inControl->move(1,0, map_.get());
     wait = false;
   }
   if (key == sf::Keyboard::Numpad7) {
-    player_->move(-1,-1, map_.get());
+    inControl->move(-1,-1, map_.get());
     wait = false;
   }
   if (key == sf::Keyboard::Numpad9) {
-    player_->move(1,-1, map_.get());
+    inControl->move(1,-1, map_.get());
     wait = false;
   }
   if (key == sf::Keyboard::Numpad3) {
-    player_->move(1,1, map_.get());
+    inControl->move(1,1, map_.get());
     wait = false;
   }
   if (key == sf::Keyboard::Numpad1) {
-    player_->move(-1,1, map_.get());
+    inControl->move(-1,1, map_.get());
     wait = false;
   }
+  if (key == sf::Keyboard::L) {
+    look();
+  }
 
+  if (key == sf::Keyboard::Escape) {
+    state = STATE::PLAY;
+  }
+
+  if(state == STATE::LOOK)
+    wait = true;
   return wait;
 }
 
@@ -129,4 +149,8 @@ void Game::processAi() {
     if(npc->isMob())
       npc->moveTowards(player_.get(), map_.get());
   }
+}
+
+void Game::look() {
+  state = STATE::LOOK;
 }
