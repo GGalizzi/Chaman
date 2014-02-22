@@ -2,8 +2,8 @@
 
 Mob::Mob() {}
 
-Mob::Mob(int maxhp, int atk, int def) : 
-  maxhp_(maxhp), curhp_(maxhp), atk_(atk), def_(def){
+Mob::Mob(FACTION faction, int maxhp, int atk, int def) : 
+  maxhp_(maxhp), curhp_(maxhp), atk_(atk), def_(def), faction_(faction) {
 }
 
 bool Mob::attack(std::shared_ptr<Mob> defender) {
@@ -16,4 +16,8 @@ bool Mob::attack(std::shared_ptr<Mob> defender) {
 
 std::string Mob::hpToString() {
   return "HP: "+std::to_string(curhp_) +"/"+std::to_string(maxhp_);
+}
+
+bool Mob::sameFactionAs(Mob* m) {
+  return faction_ == m->faction_;
 }

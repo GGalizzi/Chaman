@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Entity.h"
 #include "Game.h"
 
@@ -15,55 +16,82 @@ Entity::Entity(int sprite_x, int sprite_y, int posx, int posy) : cMob(nullptr), 
   setSprite(sprite_x, sprite_y);
 }
 //Constructor with MOB
-Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, Mob* mob) : cMob(mob),cItem(nullptr), x_(posx), y_(posy) {
+Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, std::string name, Mob* mob) : name(name),cMob(mob),cItem(nullptr), x_(posx), y_(posy) {
+  setSprite(sprite_x, sprite_y);
+}
+//Constructor with ITEM
+Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, std::string name, Item* item) : name(name), cMob(nullptr), cItem(item), x_(posx), y_(posy) {
   setSprite(sprite_x, sprite_y);
 }
 
 //Move receives -1, 0 or 1. Direction where to move.
-void Entity::move(int x, int y, Map* const& map) {
+void Entity::move(int x, int y, Map* const& map, std::list<std::shared_ptr<Entity>> ents) {
   int dx = x_+x;
   int dy = y_+y;
   int canMove = false;
   int isMob = false;
-  std::shared_ptr<Entity> hasEntity = map->hasEntity(dx,dy);
 
-  if (!hasEntity || Game::state == STATE::LOOK) {
-    canMove = true;
-  }
-  else {
-    if(hasEntity->cMob) {
-      canMove = false;
-      isMob = true;
+  std::shared_ptr<Entity> otherEnt;
+  std::list< std::shared_ptr<Entity> > entsInTile;
+
+  canMove = true;
+  //Check if there's any entity in the tile we are moving to.
+  for (auto& ent : ents) {
+    sf::Vector2i pos = ent->getPosition();
+    if(pos.x == dx && pos.y == dy) {
+      entsInTile.push_back(ent);
+      if(ent->isMob()) {
+        isMob = true;
+        canMove = false;
+        otherEnt = ent;
+      }
     }
-    else {
-      canMove = true;
-    }
+
   }
   if ((!map->isBlocked(dx,dy) && canMove && !isMob) || Game::state == STATE::LOOK) {
 
-    map->hasEntity(x_,y_,nullptr);
     x_ += x;
     y_ += y;
-    map->hasEntity(x_,y_,shared_from_this());
-
     sprite_.move(Game::SpriteSize*x, Game::SpriteSize*y);
+
+    if (Game::state == STATE::LOOK) {
+      Game::describe();
+      if(!entsInTile.empty()) {
+        Game::describe(entsInTile);
+      }
+    }
+
+  } // if blocked && canMove && !isMob
+
+  else if(map->isDoor(dx,dy)) {
+    if(!map->isLocked(dx,dy, cInventory.getContents())) {
+      map->openDoor(dx,dy);
+    }
+    else {
+      Game::log("Door is locked.");
+    }
   }
-
-  else if(isMob) {
+  else if(isMob && !cMob->sameFactionAs(otherEnt->cMob.get())) {
     //Attack, and if it dies, remove mob component. Replace sprite graphic with dead corpse.
-    if (cMob && cMob->attack(hasEntity->cMob)) {
+    if (cMob && cMob->attack(otherEnt->cMob)) {
       //If it dies//
-      
-      hasEntity->cMob.reset();
 
-      hasEntity->cItem.reset(new Item());
-      hasEntity->sprite_.setTextureRect( sf::IntRect(Game::SpriteSize*5, Game::SpriteSize*2, Game::SpriteSize, Game::SpriteSize) );
-      hasEntity->sprite_.setColor(sf::Color::Red);
+      Game::log(otherEnt->name + " dies.");
+      //No longer a mob.
+      otherEnt->cMob.reset();
+
+      //Now an item (i.e corpse)
+      otherEnt->cItem.reset(new Item(Item::TYPE::CORPSE, "Orc's Corpse"));
+      otherEnt->name += "'s Corpse";
+
+      //Set the sprite to dead body
+      //otherEnt->sprite_.setTextureRect( sf::IntRect(Game::SpriteSize*5, Game::SpriteSize*2, Game::SpriteSize, Game::SpriteSize) );
+      otherEnt->sprite_.setColor(sf::Color::Red);
     }
   }
 }
 
-void Entity::moveTowards(Entity* const& target, Map* const& map) {
+void Entity::moveTowards(Entity* const& target, Map* const& map, std::list<std::shared_ptr<Entity>> ents) {
   int cx = x_ - target->x_;
   int cy = y_ - target->y_;
 
@@ -71,15 +99,19 @@ void Entity::moveTowards(Entity* const& target, Map* const& map) {
 
   if(cx < 0)
     dx = 1;
+  else if(cx == 0)
+    dx = 0;
   else
     dx = -1;
 
   if(cy < 0)
     dy = 1;
+  else if(cy == 0)
+    dy = 0;
   else
     dy = -1;
 
-  move(dx,dy, map);
+  move(dx,dy, map, ents);
 }
 
 bool Entity::isMob() {
@@ -92,3 +124,21 @@ bool Entity::isMob() {
 sf::Sprite Entity::getSprite() {
   return sprite_;
 }
+
+sf::Vector2f Entity::posVector() {
+  sf::Vector2f vec(x_*Game::SpriteSize, y_*Game::SpriteSize);
+  return vec;
+}
+
+sf::Vector2i Entity::getPosition() {
+  sf::Vector2i pos(x_,y_);
+  return pos;
+}
+
+void Entity::setPosition(sf::Vector2i pos) {
+  x_ = pos.x;
+  y_ = pos.y;
+  sprite_.setPosition(x_*Game::SpriteSize, y_*Game::SpriteSize);
+}
+
+

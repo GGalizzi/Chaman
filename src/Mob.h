@@ -5,14 +5,21 @@
 
 struct Mob {
   public:
+    enum class FACTION { ALLIES, ORCS };
+
     Mob();
-    Mob(int maxhp, int atk, int def);
+    Mob(FACTION, int maxhp, int atk, int def);
     bool attack(std::shared_ptr<Mob> defender);
     std::string hpToString();
+
+    bool sameFactionAs(Mob*);
   private:
+
     int maxhp_;
     int curhp_;
     int atk_;
     int def_;
+
+    FACTION faction_;
 };
 #endif

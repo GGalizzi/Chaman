@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-g -c -Wall -Wextra -std=c++11
 
-OBJS=obj/main.o obj/Game.o obj/Entity.o obj/Map.o obj/Tile.o obj/Mob.o obj/Item.o
+OBJS=obj/main.o obj/Game.o obj/Entity.o obj/Map.o obj/Tile.o obj/Mob.o obj/Item.o obj/Inventory.o
 
 bin/chaman: $(OBJS)
 	mkdir -p bin

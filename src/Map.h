@@ -2,9 +2,10 @@
 #define MAP_H
 
 #include <SFML/Graphics.hpp>
-#include <vector>
+#include <list>
 #include <memory>
 #include "Tile.h"
+#include "Item.h"
 
 struct Map {
   public:
@@ -14,9 +15,10 @@ struct Map {
 
     //Checks if tile in given coords blocks passage.
     bool isBlocked(int,int) const;
-    //Checks or sets the tile in the given coordinates if it has a mob or not
-    std::shared_ptr<Entity> hasEntity(int,int);
-    void hasEntity(int,int,std::shared_ptr<Entity>);
+    bool isDoor(int,int) const;
+    bool isLocked(int, int, std::list<std::shared_ptr<Item>>) const;
+    void openDoor(int,int);
+
 
   private:
     Tile* tiles_;

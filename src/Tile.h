@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 
@@ -17,7 +18,9 @@ struct Tile {
     bool isBlocked();
 
     bool blocks;
-    std::shared_ptr<Entity> hasEntity;
+
+    bool isDoor;
+    bool isLocked;
 
   private:
     int x_;

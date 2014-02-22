@@ -2,9 +2,9 @@
 #include "Tile.h"
 
 
-Tile::Tile() : hasEntity(nullptr){
+Tile::Tile() {
   sprite_.setTexture(*Game::tex);
-  sprite_.setTextureRect(sf::IntRect(Game::SpriteSize*0, Game::SpriteSize*0, Game::SpriteSize, Game::SpriteSize));
+  sprite_.setTextureRect(sf::IntRect(Game::SpriteSize*14, Game::SpriteSize*3, Game::SpriteSize, Game::SpriteSize));
 }
 
 /*
