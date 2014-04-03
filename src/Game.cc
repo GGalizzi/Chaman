@@ -54,6 +54,10 @@ Game::Game() :
   logView_.setSize(LogViewWidth, LogViewHeight);
   logView_.setViewport(sf::FloatRect(0, 0.8f, 0.75f,0.8f));
 
+  menuView_.setCenter(WindowWidth/2, WindowHeight/2);
+  menuView_.setSize(WindowWidth,WindowHeight);
+  menuView_.setViewport(sf::FloatRect(0.f,0.f,1,1));
+
   hpText_.setFont(*fon);
   hpText_.setPosition(0,20);
 
@@ -133,12 +137,20 @@ void Game::run() {
       window_.draw(lookText_);
     }
 
-    if(state != STATE::DEAD)
+
+
+    if(state == STATE::PLAY)
       hpText_.setString(player_->cMob->hpToString());
     window_.setView(statusView_);
     window_.draw(hpText_);
     window_.setView(logView_);
     window_.draw(logText_);
+
+    if(state == STATE::INVENTORY) {
+      window_.clear();
+      window_.setView(menuView_);
+      player_->cInventory.draw(&window_);
+    }
 
 
     window_.display();
@@ -149,84 +161,88 @@ bool Game::handleInput(sf::Keyboard::Key key) {
   bool wait = true;
   entList entsVec = allEnts();
   std::shared_ptr<Entity> inControl;
-  if(state == STATE::PLAY)
+  if(state == STATE::PLAY || state == STATE::INVENTORY)
     inControl = player_;
   else if(state == STATE::LOOK)
     inControl = cursor_;
   if (key == sf::Keyboard::Q && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
     window_.close();
-  if (key == sf::Keyboard::Numpad8) {
-    inControl->move(0,-1, map_.get(), entsVec);
-    gameView_.setCenter(inControl->posVector());
-    wait = false;
-  }
-  if (key == sf::Keyboard::Numpad2) {
-    inControl->move(0,1, map_.get(),  entsVec);
-    gameView_.setCenter(inControl->posVector());
-    wait = false;
-  }
-  if (key == sf::Keyboard::Numpad4) {
-    inControl->move(-1,0, map_.get(),  entsVec);
-    gameView_.setCenter(inControl->posVector());
-    wait = false;
-  }
-  if (key == sf::Keyboard::Numpad6) {
-    inControl->move(1,0, map_.get(),  entsVec);
-    gameView_.setCenter(inControl->posVector());
-    wait = false;
-  }
-  if (key == sf::Keyboard::Numpad7) {
-    inControl->move(-1,-1, map_.get(),  entsVec);
-    gameView_.setCenter(inControl->posVector());
-    wait = false;
-  }
-  if (key == sf::Keyboard::Numpad9) {
-    inControl->move(1,-1, map_.get(),  entsVec);
-    gameView_.setCenter(inControl->posVector());
-    wait = false;
-  }
-  if (key == sf::Keyboard::Numpad3) {
-    inControl->move(1,1, map_.get(),  entsVec);
-    gameView_.setCenter(inControl->posVector());
-    wait = false;
-  }
-  if (key == sf::Keyboard::Numpad1) {
-    inControl->move(-1,1, map_.get(),  entsVec);
-    gameView_.setCenter(inControl->posVector());
-    wait = false;
-  }
-  if (key == sf::Keyboard::Numpad5) {
-    wait = false;
-  }
+  if (state == STATE::PLAY) {
+    if (key == sf::Keyboard::Numpad8) {
+      inControl->move(0,-1, map_.get(), entsVec);
+      gameView_.setCenter(inControl->posVector());
+      wait = false;
+    }
+    if (key == sf::Keyboard::Numpad2) {
+      inControl->move(0,1, map_.get(),  entsVec);
+      gameView_.setCenter(inControl->posVector());
+      wait = false;
+    }
+    if (key == sf::Keyboard::Numpad4) {
+      inControl->move(-1,0, map_.get(),  entsVec);
+      gameView_.setCenter(inControl->posVector());
+      wait = false;
+    }
+    if (key == sf::Keyboard::Numpad6) {
+      inControl->move(1,0, map_.get(),  entsVec);
+      gameView_.setCenter(inControl->posVector());
+      wait = false;
+    }
+    if (key == sf::Keyboard::Numpad7) {
+      inControl->move(-1,-1, map_.get(),  entsVec);
+      gameView_.setCenter(inControl->posVector());
+      wait = false;
+    }
+    if (key == sf::Keyboard::Numpad9) {
+      inControl->move(1,-1, map_.get(),  entsVec);
+      gameView_.setCenter(inControl->posVector());
+      wait = false;
+    }
+    if (key == sf::Keyboard::Numpad3) {
+      inControl->move(1,1, map_.get(),  entsVec);
+      gameView_.setCenter(inControl->posVector());
+      wait = false;
+    }
+    if (key == sf::Keyboard::Numpad1) {
+      inControl->move(-1,1, map_.get(),  entsVec);
+      gameView_.setCenter(inControl->posVector());
+      wait = false;
+    }
+    if (key == sf::Keyboard::Numpad5) {
+      wait = false;
+    }
 
-  if (key == sf::Keyboard::J) {
-    wait = true;
-    logView_.move(0.f, 12.f);
-  }
-  if (key == sf::Keyboard::K) {
-    wait = true;
-    logView_.move(0.f, -12.f);
-  }
+    if (key == sf::Keyboard::J) {
+      wait = true;
+      logView_.move(0.f, 12.f);
+    }
+    if (key == sf::Keyboard::K) {
+      wait = true;
+      logView_.move(0.f, -12.f);
+    }
 
-  if (key == sf::Keyboard::X) {
-    describe(player_.get());
-    look();
-  }
+    if (key == sf::Keyboard::X) {
+      describe(player_.get());
+      look();
+    }
 
-  if (inControl == player_ && key == sf::Keyboard::G) {
-    for (auto& item : items_) {
-      auto pos = item->getPosition();
-      if(pos == player_->getPosition()) {
-        player_->cInventory.add(item.get());
-        items_.remove(item);
-        break;
+    if (inControl == player_ && key == sf::Keyboard::G) {
+      for (auto& item : items_) {
+        auto pos = item->getPosition();
+        if(pos == player_->getPosition()) {
+          player_->cInventory.add(item.get());
+          items_.remove(item);
+          break;
+        }
       }
     }
-  }
 
-  if (key == sf::Keyboard::I) {
-    player_->cInventory.logContents();
-  }
+    if (key == sf::Keyboard::I) {
+      Game::state = STATE::INVENTORY;
+      player_->cInventory.logContents();
+    }
+
+  } // If state == PLAY
 
   if (key == sf::Keyboard::Escape) {
     state = STATE::PLAY;
@@ -287,6 +303,10 @@ void Game::describe(/*Nothing*/) {
 
 void Game::appendString(sf::Text& text, std::string st) {
   text.setString(st + text.getString());
+}
+
+void Game::appendStringAfter(sf::Text& text, std::string st) {
+  text.setString(text.getString() + st);
 }
 
 void Game::log(std::string st) {

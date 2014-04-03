@@ -8,7 +8,7 @@
 #include "Map.h"
 
 
-enum class STATE { PLAY, LOOK, PAUSE, DEAD };
+enum class STATE { PLAY, LOOK, INVENTORY, PAUSE, DEAD };
 
 struct Game {
   public:
@@ -42,6 +42,7 @@ struct Game {
     static void describe(Entity*);
     static void describe();
     static void appendString(sf::Text&, std::string);
+    static void appendStringAfter(sf::Text& text, std::string st);
 
     static void log(std::string);
   private:
@@ -49,6 +50,8 @@ struct Game {
     sf::View gameView_;
     sf::View statusView_;
     sf::View logView_;
+
+    sf::View menuView_;
     std::shared_ptr<Map> map_;
     std::shared_ptr<Entity> player_;
     std::shared_ptr<Entity> cursor_;
