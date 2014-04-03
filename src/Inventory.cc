@@ -12,6 +12,7 @@ Inventory::Inventory() {
 void Inventory::logContents() {
   std::string logs;
 
+  invText_.setString("");
   char letter = 'a';
   for(auto& item : contents_) {
     logs = ") "+item->getName();
