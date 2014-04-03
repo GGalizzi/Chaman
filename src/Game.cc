@@ -25,21 +25,21 @@ Game::Game() :
   gameView_(),
   statusView_(),
   map_(new Map),
-  player_(new Entity(4,2, 1,1, "That's you", new Mob(Mob::FACTION::ALLIES, 520,5,2))),
+  player_(new Entity(0,0, 1,1, "That's you", new Mob(Mob::FACTION::ALLIES, 520,5,2))),
   cursor_(new Entity(9,0, 1,1)),
   wait_(false)
 {
   fon->loadFromFile("Sansation.ttf");
-  tex->loadFromFile("ultimatiles.png");
+  tex->loadFromFile("ascii.png");
   for(int i = 0; i<8; i++) {
-    std::shared_ptr<Entity> npc(new Entity(3,12, i+5,5, "Orc", new Mob( Mob::FACTION::ORCS, 10, 3, 1)));
+    std::shared_ptr<Entity> npc(new Entity(0,1, i+5,5, "Orc", new Mob( Mob::FACTION::ORCS, 10, 3, 1)));
     npcs_.push_back(npc);
 
 
-    std::shared_ptr<Entity> item(new Entity(12,10, 5,4, "Potion", new Item(Item::TYPE::POTION, "Potion")));
+    std::shared_ptr<Entity> item(new Entity(0,8, 5,4, "Potion", new Item(Item::TYPE::POTION, "Potion")));
     items_.push_back(item);
   }
-  std::shared_ptr<Entity> key(new Entity(12,10, 10,10, "Key", new Item(Item::TYPE::KEY, "Rusty Key")));
+  std::shared_ptr<Entity> key(new Entity(0,8, 10,10, "Key", new Item(Item::TYPE::KEY, "Rusty Key")));
   items_.push_back(key);
 
   gameView_.setCenter(player_->posVector());

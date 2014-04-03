@@ -4,7 +4,9 @@
 
 Tile::Tile() {
   sprite_.setTexture(*Game::tex);
-  sprite_.setTextureRect(sf::IntRect(Game::SpriteSize*14, Game::SpriteSize*3, Game::SpriteSize, Game::SpriteSize));
+
+  //Floor Sprite
+  sprite_.setTextureRect(sf::IntRect(Game::SpriteSize*1, Game::SpriteSize*9, Game::SpriteSize, Game::SpriteSize));
 }
 
 /*
