@@ -16,6 +16,7 @@ struct Entity : std::enable_shared_from_this<Entity> {
     Entity(int sprite_x, int sprite_y, int posx, int posy);
     Entity(int sprite_x, int sprite_y, int posx, int posy, std::string, Mob*);
     Entity(int sprite_x, int sprite_y, int posx, int posy, std::string, Item* item);
+    Entity(std::string, int,int);
 
     void move(int,int, Map* const&, std::list<std::shared_ptr<Entity>>);
     void moveTowards(Entity* const&, Map* const&, std::list<std::shared_ptr<Entity>>);

@@ -1,0 +1,5 @@
+sprite 0 8
+type Item
+ItemType POTION
+ItemName
+Potion

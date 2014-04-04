@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 #include "Entity.h"
 #include "Game.h"
 
@@ -22,6 +24,60 @@ Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, std::string name,
 //Constructor with ITEM
 Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, std::string name, Item* item) : name(name), cMob(nullptr), cItem(item), x_(posx), y_(posy) {
   setSprite(sprite_x, sprite_y);
+}
+
+Entity::Entity(std::string name, int posx, int posy) : name(name), x_(posx), y_(posy) {
+  // Read corresponding file.
+  std::ifstream infile("entities/"+name+".item");
+
+  std::string line;
+
+  //Start reading the lines.
+  while(std::getline(infile, line)) {
+
+    //the stream where we'll exctact info from:
+    std::istringstream iss(line);
+
+    //Reading between blank spaces.
+    do {
+      std::string sub; //substring
+      iss >> sub;
+      if(sub == "sprite") { //sprite coordinates set
+        int sprite_x, sprite_y;
+        iss >> sprite_x; //move the first coordinate to X
+        iss >> sprite_y; //move the second coordinat to Y
+        setSprite(sprite_x, sprite_y);
+      }
+
+      else if (sub == "type") { // set the appropiate component this Entity should have.
+        iss >> sub;
+
+        if (sub == "Item") { // With cItem component.
+          std::getline(infile, line); //Next line
+          std::istringstream iss(line);
+          iss >> sub; // ItemType
+          std::string ItemTypeS;
+          iss >> ItemTypeS; // = this;
+          Item::TYPE ItemType;
+
+          if(ItemTypeS == "KEY") {
+            ItemType = Item::TYPE::KEY;
+          }
+          else {
+            ItemType = Item::TYPE::MISC;
+          }
+
+          std::getline(infile, line);
+          std::string itemName;
+          std::getline(infile, itemName); 
+
+          std::shared_ptr<Item> item(new Item(ItemType, itemName));
+
+          cItem = item;
+        }
+      }
+    } while (iss);
+  }
 }
 
 //Move receives -1, 0 or 1. Direction where to move.

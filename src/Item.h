@@ -5,7 +5,7 @@
 
 struct Item {
   public:
-    enum class TYPE { KEY, POTION, CORPSE };
+    enum class TYPE { KEY, POTION, CORPSE, MISC };
 
     Item(TYPE, std::string);
 

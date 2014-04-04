@@ -36,10 +36,10 @@ Game::Game() :
     npcs_.push_back(npc);
 
 
-    std::shared_ptr<Entity> item(new Entity(0,8, 5,4, "Potion", new Item(Item::TYPE::POTION, "Potion")));
+    std::shared_ptr<Entity> item(new Entity("potion", 5,4));
     items_.push_back(item);
   }
-  std::shared_ptr<Entity> key(new Entity(0,8, 10,10, "Key", new Item(Item::TYPE::KEY, "Rusty Key")));
+  std::shared_ptr<Entity> key(new Entity("key", 10,10));
   items_.push_back(key);
 
   gameView_.setCenter(player_->posVector());
