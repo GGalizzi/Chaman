@@ -112,11 +112,7 @@ Entity::Entity(std::string name, int posx, int posy) : name(name), x_(posx), y_(
           int mobDef;
           defLine >> mobDef;
 
-          std::cout << "MaxHp: "  << maxHP  << std::endl;
-          std::cout << "Mobatk: " << mobAtk << std::endl;
-          std::cout << "Mobdef: " << mobDef << std::endl;
-
-          std::shared_ptr<Mob> mob(new Mob(MobFaction, maxHP, 2, mobDef));
+          std::shared_ptr<Mob> mob(new Mob(MobFaction, maxHP, mobAtk, mobDef));
           cMob = mob;
         }
       }
