@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include "Entity.h"
@@ -28,7 +29,7 @@ Entity::Entity(int sprite_x, int sprite_y, int posx, int posy, std::string name,
 
 Entity::Entity(std::string name, int posx, int posy) : name(name), x_(posx), y_(posy) {
   // Read corresponding file.
-  std::ifstream infile("entities/"+name+".item");
+  std::ifstream infile("entities/"+name+".ent");
 
   std::string line;
 
@@ -74,6 +75,49 @@ Entity::Entity(std::string name, int posx, int posy) : name(name), x_(posx), y_(
           std::shared_ptr<Item> item(new Item(ItemType, itemName));
 
           cItem = item;
+        }
+
+        else if (sub == "Mob") { // cMob component.
+          std::getline(infile, line); //Next line -> Faction
+          iss >> sub; // MobFaction
+          Mob::FACTION MobFaction;
+          std::string MobFactionS;
+          iss >> MobFactionS;
+
+          if(MobFactionS == "ORCS") {
+            MobFaction = Mob::FACTION::ORCS;
+          }
+          else if (MobFactionS == "ALLIES") {
+            MobFaction = Mob::FACTION::ALLIES;
+          }
+          else {
+            MobFaction = Mob::FACTION::NEUTRAL;
+          }
+
+          std::getline(infile, line); //Next line -> HP
+          std::istringstream hpLine(line);
+          hpLine >> sub; //MobHP
+          int maxHP;
+          hpLine >> maxHP;
+
+          std::getline(infile, line); // Next line -> Atk
+          std::istringstream atkLine(line);
+          atkLine >> sub; //MobAtk
+          int mobAtk;
+          atkLine >> mobAtk;
+
+          std::getline(infile, line); // Next line -> def
+          std::istringstream defLine(line);
+          defLine >> sub; //MobDef
+          int mobDef;
+          defLine >> mobDef;
+
+          std::cout << "MaxHp: "  << maxHP  << std::endl;
+          std::cout << "Mobatk: " << mobAtk << std::endl;
+          std::cout << "Mobdef: " << mobDef << std::endl;
+
+          std::shared_ptr<Mob> mob(new Mob(MobFaction, maxHP, 2, mobDef));
+          cMob = mob;
         }
       }
     } while (iss);

@@ -5,7 +5,7 @@
 
 struct Mob {
   public:
-    enum class FACTION { ALLIES, ORCS };
+    enum class FACTION { ALLIES, ORCS, NEUTRAL };
 
     Mob();
     Mob(FACTION, int maxhp, int atk, int def);

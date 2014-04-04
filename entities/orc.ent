@@ -1,0 +1,6 @@
+sprite 0 1
+type Mob
+MobFaction ORCS
+MobHP 10
+MobAtk 3
+MobDef 1

@@ -32,7 +32,8 @@ Game::Game() :
   fon->loadFromFile("Sansation.ttf");
   tex->loadFromFile("ascii.png");
   for(int i = 0; i<8; i++) {
-    std::shared_ptr<Entity> npc(new Entity(0,1, i+5,5, "Orc", new Mob( Mob::FACTION::ORCS, 10, 3, 1)));
+    //std::shared_ptr<Entity> npc(new Entity(0,1, i+5,5, "Orc", new Mob( Mob::FACTION::ORCS, 10, 3, 1)));
+    std::shared_ptr<Entity> npc(new Entity("orc", i+5,5));
     npcs_.push_back(npc);
 
 
