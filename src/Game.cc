@@ -26,7 +26,7 @@ Game::Game() :
   statusView_(),
   map_(new Map),
   player_(new Entity(0,0, 1,1, "That's you", new Mob(Mob::FACTION::ALLIES, 520,5,2))),
-  cursor_(new Entity(9,0, 1,1)),
+  cursor_(new Entity(0,0, 1,1)),
   wait_(false)
 {
   fon->loadFromFile("Sansation.ttf");
@@ -168,7 +168,7 @@ bool Game::handleInput(sf::Keyboard::Key key) {
     inControl = cursor_;
   if (key == sf::Keyboard::Q && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
     window_.close();
-  if (state == STATE::PLAY) {
+  if (state == STATE::PLAY || state == STATE::LOOK) {
     if (key == sf::Keyboard::Numpad8) {
       inControl->move(0,-1, map_.get(), entsVec);
       gameView_.setCenter(inControl->posVector());
