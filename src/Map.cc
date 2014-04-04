@@ -20,6 +20,8 @@ Map::Map() {
       }
       else {
         tiles_[x+y*width_].blocks = false;
+        tiles_[x+y*width_].isDoor = false;
+        tiles_[x+y*width_].isLocked = false;
       }
     }
 }
