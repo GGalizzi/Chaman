@@ -138,22 +138,21 @@ void Game::run() {
       window_.draw(lookText_);
     }
 
-
-
-    if(state == STATE::PLAY)
+    if(state == STATE::PLAY) {
       hpText_.setString(player_->cMob->hpToString());
-    window_.setView(statusView_);
-    window_.draw(hpText_);
-    window_.setView(logView_);
-    window_.draw(logText_);
+    }
 
+    
     if(state == STATE::INVENTORY) {
       window_.clear();
       window_.setView(menuView_);
       player_->cInventory.draw(&window_);
     }
 
-
+    window_.setView(statusView_);
+    window_.draw(hpText_);
+    window_.setView(logView_);
+    window_.draw(logText_);
     window_.display();
   }
 }
