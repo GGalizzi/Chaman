@@ -5,6 +5,9 @@ Item::Item(TYPE type, std::string name) : type_(type), name_(name), stack_(1) {
   if(name == "Potion") {
     effect_ = &Item::usePotion;
   }
+  else {
+    effect_ = NULL;
+  }
 }
 
 Item& Item::operator++() {
@@ -29,7 +32,12 @@ bool Item::isType(TYPE type) {
 }
 
 void Item::use() {
-  (this->*effect_)();
+  if (effect_ != NULL) {
+    (this->*effect_)();
+  }
+  else {
+    Game::log("You can not use that.");
+  }
 }
 
 void Item::usePotion() {
