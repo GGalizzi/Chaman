@@ -60,6 +60,7 @@ struct Game {
     entList items_;
 
     bool wait_;
+    bool itemInput_;
 
     sf::Text hpText_;
     static sf::Text logText_;

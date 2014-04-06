@@ -27,7 +27,8 @@ Game::Game() :
   map_(new Map),
   player_(new Entity(0,0, 1,1, "That's you", new Mob(Mob::FACTION::ALLIES, 520,5,2))),
   cursor_(new Entity(0,0, 1,1)),
-  wait_(false)
+  wait_(false),
+  itemInput_(false)
 {
   fon->loadFromFile("Sansation.ttf");
   tex->loadFromFile("ascii.png");
@@ -83,23 +84,25 @@ void Game::run() {
     sf::Event event;
 
     wait_ = true;
-    while(window_.pollEvent(event)) {
-      switch(event.type) {
-        case sf::Event::Closed:
-          window_.close();
-          break;
-        case sf::Event::KeyPressed:
-          wait_ = handleInput(event.key.code);
-          break;
-        case sf::Event::TextEntered:
-          if(state == STATE::INVENTORY) {
-            sf::String input(event.text.unicode);
-            inventoryInput(input.toAnsiString());
-          }
-          break;
-        default:
-          break;
-      }
+    window_.waitEvent(event);
+    switch(event.type) {
+      case sf::Event::Closed:
+        window_.close();
+        break;
+      case sf::Event::KeyPressed:
+        wait_ = handleInput(event.key.code);
+        break;
+      case sf::Event::KeyReleased:
+        if(state == STATE::INVENTORY) itemInput_ = true;
+        break;
+      case sf::Event::TextEntered:
+        if(state == STATE::INVENTORY && itemInput_ == true) {
+          sf::String input(event.text.unicode);
+          inventoryInput(input.toAnsiString());
+        }
+        break;
+      default:
+        break;
     }
 
     if(!wait_) {
@@ -255,6 +258,7 @@ bool Game::handleInput(sf::Keyboard::Key key) {
 
   if (key == sf::Keyboard::Escape) {
     state = STATE::PLAY;
+    itemInput_ = false;
   }
 
   if(state == STATE::LOOK)
@@ -264,6 +268,8 @@ bool Game::handleInput(sf::Keyboard::Key key) {
 
 void Game::inventoryInput(std::string input) {
   log(input);
+  state = STATE::PLAY;
+  itemInput_ = false;
 }
 
 void Game::processAi() {
