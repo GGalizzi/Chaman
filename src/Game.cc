@@ -78,6 +78,7 @@ Game::~Game() {
 }
 
 void Game::run() {
+  // Game LOOP
   while(window_.isOpen() && state != STATE::DEAD) {
     sf::Event event;
 
@@ -112,7 +113,7 @@ void Game::run() {
         }
       }
 
-      if(!player_->cMob) {
+      if(!player_->cMob) { // Check if player died.
         state = STATE::DEAD;
       }
 
@@ -226,12 +227,13 @@ bool Game::handleInput(sf::Keyboard::Key key) {
       look();
     }
 
+    // Pick up item
     if (inControl == player_ && key == sf::Keyboard::G) {
       for (auto& item : items_) {
         auto pos = item->getPosition();
         if(pos == player_->getPosition()) {
           player_->cInventory.add(item.get());
-          items_.remove(item);
+          items_.remove(item); // Remove it from the map.
           break;
         }
       }
