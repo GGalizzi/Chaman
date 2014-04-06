@@ -1,6 +1,11 @@
 #include "Item.h"
+#include "Game.h"
 
-Item::Item(TYPE type, std::string name) : type_(type), name_(name), stack_(1) {}
+Item::Item(TYPE type, std::string name) : type_(type), name_(name), stack_(1) {
+  if(name == "Potion") {
+    effect_ = &Item::usePotion;
+  }
+}
 
 Item& Item::operator++() {
   ++stack_;
@@ -21,4 +26,12 @@ int Item::getStack() {
 
 bool Item::isType(TYPE type) {
   return type_ == type;
+}
+
+void Item::use() {
+  (this->*effect_)();
+}
+
+void Item::usePotion() {
+  Game::log("gulp");
 }

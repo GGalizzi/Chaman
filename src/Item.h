@@ -15,9 +15,15 @@ struct Item {
     int getStack();
     std::string getName();
     bool isType(TYPE);
+
+    void use();
+
+    void usePotion();
   private:
     TYPE type_;
     std::string name_;
     int stack_;
+
+    void (Item::*effect_)();
 };
 #endif

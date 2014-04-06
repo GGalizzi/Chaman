@@ -64,7 +64,7 @@ void Inventory::add(Entity* item) {
 }
 
 void Inventory::use(Item* item) {
-  Game::log("You used: "+ item->getName());
+  item->use();
 }
 
 void Inventory::draw(sf::RenderWindow* win) {
