@@ -34,6 +34,17 @@ Inventory::itemList Inventory::getContents() {
   return contents_;
 }
 
+Inventory::itemMap Inventory::getList() {
+  itemMap items;
+  char letter = 'a';
+  for(auto& item : contents_) {
+    items.insert(std::pair<char, std::shared_ptr<Item>>(letter, item));
+    ++letter;
+  }
+
+  return items;
+}
+
 void Inventory::add(Entity* item) {
   Game::log("You picked up "+item->cItem->getName());
   std::shared_ptr<Item> itemPtr;
@@ -50,6 +61,10 @@ void Inventory::add(Entity* item) {
     itemPtr->addStack();
   else
     contents_.push_back(itemPtr);
+}
+
+void Inventory::use(Item* item) {
+  Game::log("You used: "+ item->getName());
 }
 
 void Inventory::draw(sf::RenderWindow* win) {

@@ -29,7 +29,7 @@ struct Game {
 
     void run();
     bool handleInput(sf::Keyboard::Key key);
-    void inventoryInput(std::string);
+    void inventoryInput(char);
 
     void processAi();
     entList allEnts();

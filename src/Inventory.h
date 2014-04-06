@@ -11,13 +11,15 @@ struct Entity;
 struct Inventory {
   public:
     typedef std::list<std::shared_ptr<Item>> itemList;
+    typedef std::map< char, std::shared_ptr<Item> > itemMap;
 
     Inventory();
 
     itemList getContents();
-    std::map< std::string, std::shared_ptr<Item> > getList();
+    itemMap getList();
     void logContents();
     void add(Entity*);
+    void use(Item*);
 
     void draw(sf::RenderWindow*);
 

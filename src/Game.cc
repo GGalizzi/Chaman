@@ -97,8 +97,8 @@ void Game::run() {
         break;
       case sf::Event::TextEntered:
         if(state == STATE::INVENTORY && itemInput_ == true) {
-          sf::String input(event.text.unicode);
-          inventoryInput(input.toAnsiString());
+          char input = event.text.unicode;
+          inventoryInput(input);
         }
         break;
       default:
@@ -266,8 +266,15 @@ bool Game::handleInput(sf::Keyboard::Key key) {
   return wait;
 }
 
-void Game::inventoryInput(std::string input) {
-  log(input);
+void Game::inventoryInput(char input) {
+  Inventory::itemMap m = player_->cInventory.getList();
+  if(m.count(input)) {
+    player_->cInventory.use(m[input].get());
+  }
+  else {
+    log("Invalid input.");
+    return;
+  }
   state = STATE::PLAY;
   itemInput_ = false;
 }
