@@ -91,6 +91,12 @@ void Game::run() {
         case sf::Event::KeyPressed:
           wait_ = handleInput(event.key.code);
           break;
+        case sf::Event::TextEntered:
+          if(state == STATE::INVENTORY) {
+            sf::String input(event.text.unicode);
+            inventoryInput(input.toAnsiString());
+          }
+          break;
         default:
           break;
       }
@@ -162,10 +168,11 @@ bool Game::handleInput(sf::Keyboard::Key key) {
   bool wait = true;
   entList entsVec = allEnts();
   std::shared_ptr<Entity> inControl;
-  if(state == STATE::PLAY || state == STATE::INVENTORY)
+  if(state == STATE::PLAY)
     inControl = player_;
   else if(state == STATE::LOOK)
     inControl = cursor_;
+
   if (key == sf::Keyboard::Q && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
     window_.close();
   if (state == STATE::PLAY || state == STATE::LOOK) {
@@ -253,6 +260,10 @@ bool Game::handleInput(sf::Keyboard::Key key) {
   if(state == STATE::LOOK)
     wait = true;
   return wait;
+}
+
+void Game::inventoryInput(std::string input) {
+  log(input);
 }
 
 void Game::processAi() {

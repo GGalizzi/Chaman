@@ -15,6 +15,7 @@ struct Inventory {
     Inventory();
 
     itemList getContents();
+    std::map< std::string, std::shared_ptr<Item> > getList();
     void logContents();
     void add(Entity*);
 
