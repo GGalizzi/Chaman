@@ -11,7 +11,7 @@ Mob::Mob(FACTION faction, int maxhp, int atk, int def) :
 bool Mob::attack(std::shared_ptr<Mob> defender) {
   defender->curhp_ -= atk_;
 
-  return (defender->curhp_ <= 0) ? true : false;
+  return defender->curhp_ <= 0;
 }
 
 std::string Mob::hpToString() {
