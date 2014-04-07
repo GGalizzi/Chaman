@@ -1,8 +1,8 @@
 #include "Item.h"
 #include "Game.h"
 
-Item::Item(TYPE type, std::string name) : type_(type), name_(name), stack_(1) {
-  if(name == "Potion") {
+Item::Item(TYPE type, std::string name, int potency) : type_(type), name_(name), potency_(potency), stack_(1) {
+  if(type == TYPE::POTION) {
     effect_ = &Item::usePotion;
   }
   else {
@@ -52,5 +52,5 @@ bool Item::use(Mob* mob) {
 
 void Item::usePotion(Mob* mob) {
   Game::log("You drink the potion.");
-  mob->heal(25);
+  mob->heal(10*potency_);
 }

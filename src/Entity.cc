@@ -64,15 +64,24 @@ Entity::Entity(std::string name, int posx, int posy) : name(name), x_(posx), y_(
           if(ItemTypeS == "KEY") {
             ItemType = Item::TYPE::KEY;
           }
+          else if (ItemTypeS == "POTION") {
+            ItemType = Item::TYPE::POTION;
+          }
           else {
             ItemType = Item::TYPE::MISC;
           }
 
-          std::getline(infile, line);
-          std::string itemName;
-          std::getline(infile, itemName); 
+          std::getline(infile, line); // ItemPotency
+          std::istringstream itemPotencyStream(line);
+          itemPotencyStream >> sub;
+          int itemPotency;
+          itemPotencyStream >> itemPotency;
 
-          std::shared_ptr<Item> item(new Item(ItemType, itemName));
+          std::getline(infile, line); // ItemName
+          std::string itemName;
+          std::getline(infile, itemName); // = this;
+
+          std::shared_ptr<Item> item(new Item(ItemType, itemName, itemPotency));
 
           cItem = item;
         }

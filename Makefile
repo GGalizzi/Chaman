@@ -7,7 +7,11 @@ bin/chaman: $(OBJS)
 	mkdir -p bin
 	$(CC) -g -o $@ -Wall -Wextra -std=c++11 -lsfml-graphics -lsfml-window -lsfml-system $(OBJS)
 
-obj/%.o: src/%.cc
+obj/main.o: src/main.cc
+	mkdir -p obj
+	$(CC) $(CFLAGS) -o $@ $<
+
+obj/%.o: src/%.cc src/%.h
 	mkdir -p obj
 	$(CC) $(CFLAGS) -o $@ $<
 

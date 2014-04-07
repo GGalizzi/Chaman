@@ -276,7 +276,7 @@ void Game::inventoryInput(char input) {
     }
   }
   else {
-    log("Invalid input.");
+    log("You don't have that item.");
     return;
   }
   state = STATE::PLAY;

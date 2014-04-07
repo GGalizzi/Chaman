@@ -9,7 +9,7 @@ struct Item {
   public:
     enum class TYPE { KEY, POTION, CORPSE, MISC };
 
-    Item(TYPE, std::string);
+    Item(TYPE, std::string, int potency=1);
     ~Item();
 
     Item& operator++();
@@ -26,6 +26,7 @@ struct Item {
   private:
     TYPE type_;
     std::string name_;
+    int potency_;
     int stack_;
 
     void (Item::*effect_)(Mob*);

@@ -1,4 +1,6 @@
+#include <sstream>
 #include "Mob.h"
+#include "Game.h"
 
 Mob::Mob() {}
 
@@ -8,10 +10,8 @@ Mob::Mob(FACTION faction, int maxhp, int atk, int def) :
 
 bool Mob::attack(std::shared_ptr<Mob> defender) {
   defender->curhp_ -= atk_;
-  if (defender->curhp_ <= 0) {
-    return true;
-  }
-  return false;
+
+  return (defender->curhp_ <= 0) ? true : false;
 }
 
 std::string Mob::hpToString() {
@@ -19,8 +19,12 @@ std::string Mob::hpToString() {
 }
 
 void Mob::heal(int ammount) {
+  int prevhp = curhp_;
   curhp_ += ammount;
   if (curhp_ > maxhp_) curhp_ = maxhp_;
+  std::ostringstream output;
+  output << "You heal " << (curhp_ - prevhp) << " HP.";
+  Game::log(output.str());
 }
 
 bool Mob::sameFactionAs(Mob* m) {
