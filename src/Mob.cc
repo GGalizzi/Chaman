@@ -20,6 +20,7 @@ std::string Mob::hpToString() {
 
 void Mob::heal(int ammount) {
   curhp_ += ammount;
+  if (curhp_ > maxhp_) curhp_ = maxhp_;
 }
 
 bool Mob::sameFactionAs(Mob* m) {
