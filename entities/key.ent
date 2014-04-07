@@ -1,5 +1,6 @@
 sprite 0 8
 type Item
 ItemType KEY
+ItemPotency 1
 ItemName
 Rusty Key
