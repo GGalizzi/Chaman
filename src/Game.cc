@@ -269,7 +269,11 @@ bool Game::handleInput(sf::Keyboard::Key key) {
 void Game::inventoryInput(char input) {
   Inventory::itemMap m = player_->cInventory.getList();
   if(m.count(input)) {
-    player_->cInventory.use(m[input].get());
+    int stack = player_->cInventory.use(m[input].get(), player_->cMob.get());
+
+    if(stack < 1) {
+      player_->cInventory.destroy( m[input] );
+    }
   }
   else {
     log("Invalid input.");

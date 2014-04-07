@@ -58,13 +58,20 @@ void Inventory::add(Entity* item) {
     }
   }
   if(alreadyHave)
-    itemPtr->addStack();
+    ++(*itemPtr);
   else
     contents_.push_back(itemPtr);
 }
 
-void Inventory::use(Item* item) {
-  item->use();
+void Inventory::destroy(std::shared_ptr<Item> item) {
+  contents_.remove(item);
+}
+
+int Inventory::use(Item* item, Mob* mob) {
+  if (item->use(mob)) {
+    --(*item);
+  }
+  return item->getStack();
 }
 
 void Inventory::draw(sf::RenderWindow* win) {

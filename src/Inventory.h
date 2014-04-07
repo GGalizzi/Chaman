@@ -7,6 +7,7 @@
 
 struct Item;
 struct Entity;
+struct Mob;
 
 struct Inventory {
   public:
@@ -19,7 +20,8 @@ struct Inventory {
     itemMap getList();
     void logContents();
     void add(Entity*);
-    void use(Item*);
+    void destroy(std::shared_ptr<Item>);
+    int use(Item*, Mob*);
 
     void draw(sf::RenderWindow*);
 

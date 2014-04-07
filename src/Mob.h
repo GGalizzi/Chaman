@@ -12,6 +12,8 @@ struct Mob {
     bool attack(std::shared_ptr<Mob> defender);
     std::string hpToString();
 
+    void heal(int);
+
     bool sameFactionAs(Mob*);
   private:
 

@@ -10,8 +10,16 @@ Item::Item(TYPE type, std::string name) : type_(type), name_(name), stack_(1) {
   }
 }
 
+Item::~Item() {
+}
+
 Item& Item::operator++() {
   ++stack_;
+  return *this;
+}
+
+Item& Item::operator--() {
+  --stack_;
   return *this;
 }
 
@@ -31,15 +39,18 @@ bool Item::isType(TYPE type) {
   return type_ == type;
 }
 
-void Item::use() {
+bool Item::use(Mob* mob) {
   if (effect_ != NULL) {
-    (this->*effect_)();
+    (this->*effect_)(mob);
+    return true;
   }
   else {
     Game::log("You can not use that.");
+    return false;
   }
 }
 
-void Item::usePotion() {
-  Game::log("gulp");
+void Item::usePotion(Mob* mob) {
+  Game::log("You drink the potion.");
+  mob->heal(25);
 }

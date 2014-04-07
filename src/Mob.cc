@@ -18,6 +18,10 @@ std::string Mob::hpToString() {
   return "HP: "+std::to_string(curhp_) +"/"+std::to_string(maxhp_);
 }
 
+void Mob::heal(int ammount) {
+  curhp_ += ammount;
+}
+
 bool Mob::sameFactionAs(Mob* m) {
   return faction_ == m->faction_;
 }
