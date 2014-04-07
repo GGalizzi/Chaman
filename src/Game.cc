@@ -30,7 +30,7 @@ Game::Game() :
   wait_(false),
   itemInput_(false)
 {
-  fon->loadFromFile("Sansation.ttf");
+  fon->loadFromFile("terminus.ttf");
   tex->loadFromFile("ascii.png");
   for(int i = 0; i<8; i++) {
     //std::shared_ptr<Entity> npc(new Entity(0,1, i+5,5, "Orc", new Mob( Mob::FACTION::ORCS, 10, 3, 1)));
@@ -61,7 +61,8 @@ Game::Game() :
   menuView_.setViewport(sf::FloatRect(0.f,0.f,1,1));
 
   hpText_.setFont(*fon);
-  hpText_.setPosition(0,20);
+  hpText_.setCharacterSize(SpriteSize);
+  hpText_.setPosition(SpriteSize*4,SpriteSize*2);
 
   logText_.setFont(*fon);
   logText_.setPosition(0,0);
