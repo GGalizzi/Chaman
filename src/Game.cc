@@ -61,6 +61,7 @@ Game::Game() :
   menuView_.setViewport(sf::FloatRect(0.f,0.f,1,1));
 
   hpText_.setFont(*fon);
+  hpText_.setColor(sf::Color::Red);
   hpText_.setCharacterSize(SpriteSize);
   hpText_.setPosition(SpriteSize*4,SpriteSize*2);
 
@@ -69,7 +70,7 @@ Game::Game() :
   logText_.setCharacterSize(12);
 
   lookText_.setFont(*fon);
-  lookText_.setCharacterSize(12);
+  lookText_.setCharacterSize(SpriteSize);
 
   background_.setOutlineColor(sf::Color::White);
   background_.setOutlineThickness(SpriteSize/4);

@@ -10,7 +10,7 @@ Map::Map() {
   for (int x = 0; x < width_; x++)
     for (int y = 0; y < height_; y++) {
       if(y == 0 || y == height_-1 || x == 0 || x == width_-1 || x == width_/2) {
-        tiles_[x+y*width_].setSprite(0,9);
+        tiles_[x+y*width_].setSprite(0,9, sf::Color(232,101,80));
         tiles_[x+y*width_].blocks = true;
         if(y==height_/2 && x==width_/2){
           tiles_[x+y*width_].setSprite(2,9);

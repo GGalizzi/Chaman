@@ -11,9 +11,9 @@ struct Entity;
 
 struct Tile {
   public:
-    Tile();
+    Tile(sf::Color = sf::Color::White);
     //Tile(int sprite_x, int sprite_y, int posx, int posy, bool blocks);
-    void setSprite(int,int);
+    void setSprite(int,int, sf::Color = sf::Color(255,103,23));
     void draw(sf::RenderWindow* window,int,int);
     bool isBlocked();
 
