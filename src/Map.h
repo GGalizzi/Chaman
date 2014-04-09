@@ -13,6 +13,8 @@ struct Map {
     ~Map();
     void draw(sf::RenderWindow* window);
 
+    void placeTile(std::string,int,int);
+
     //Checks if tile in given coords blocks passage.
     bool isBlocked(int,int) const;
     bool isDoor(int,int) const;
