@@ -67,42 +67,17 @@ void Map::placeTile(std::string name, int x, int y) {
       }
 
       else if(result == "blocks") {
-        bool blocks;
-
-        std::string token;
-        std::stringstream t(token);
-        std::getline(iss,token);
-        t << token;
-        t >> blocks;
-
-        tiles_[x+y*width_].blocks = blocks;
+        tiles_[x+y*width_].blocks = Game::readStream<bool>(iss);
       }
 
       else if(result == "isDoor") {
-        bool isDoor;
-
-        std::string token;
-        std::stringstream doorStream(token);
-        std::getline(iss, token);
-        doorStream << token;
-        doorStream >> isDoor;
-
-        tiles_[x+y*width_].isDoor = isDoor;
+        tiles_[x+y*width_].isDoor = Game::readStream<bool>(iss);
       }
       else if(result == "isLocked") {
-        bool isLocked;
-
-        std::string token;
-        std::stringstream lockedStream(token);
-        std::getline(iss,token);
-        lockedStream << token;
-        lockedStream >> isLocked;
-
-        tiles_[x+y*width_].isLocked = isLocked;
+        tiles_[x+y*width_].isLocked = Game::readStream<bool>(iss);
       }
     }
   }
-
 }
 
 bool Map::isBlocked(int x, int y) const {

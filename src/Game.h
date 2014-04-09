@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <list>
+#include <sstream>
 #include "Entity.h"
 #include "Map.h"
 
@@ -46,6 +47,8 @@ struct Game {
     static void appendStringAfter(sf::Text& text, std::string st);
 
     static void log(std::string);
+
+    template <class type> static type readStream(std::istringstream& iss);
   private:
     sf::RenderWindow window_;
     sf::View gameView_;
@@ -71,4 +74,18 @@ struct Game {
 
 
 };
+
+template<class type>
+type Game::readStream(std::istringstream& iss) {
+  type result;
+
+  std::string token;
+  std::stringstream resultStream(token);
+  std::getline(iss,token);
+  resultStream << token;
+  resultStream >> result;
+
+  return result;
+}
+
 #endif
