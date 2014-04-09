@@ -159,6 +159,10 @@ void Entity::move(int x, int y, Map* const& map, std::list<std::shared_ptr<Entit
     y_ += y;
     sprite_.move(Game::SpriteSize*x, Game::SpriteSize*y);
 
+    if(x_ > map->getWidth() || x_ < 0 || y_ < 0 || y_ > map->getHeight()) {
+      Game::log("DEBUG: Over Limit.");
+    }
+
     if (Game::state == STATE::LOOK) {
       Game::describe();
       if(!entsInTile.empty()) {
@@ -166,7 +170,7 @@ void Entity::move(int x, int y, Map* const& map, std::list<std::shared_ptr<Entit
       }
     }
 
-  } // if blocked && canMove && !isMob
+  } // if !blocked && canMove && !isMob
 
   else if(map->isDoor(dx,dy)) {
     if(!map->isLocked(dx,dy, cInventory.getContents())) {

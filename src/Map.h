@@ -15,11 +15,18 @@ struct Map {
 
     void placeTile(std::string,int,int);
 
+    int getHeight();
+    int getWidth();
+
     //Checks if tile in given coords blocks passage.
     bool isBlocked(int,int) const;
     bool isDoor(int,int) const;
     bool isLocked(int, int, std::list<std::shared_ptr<Item>>) const;
     void openDoor(int,int);
+
+    //Generation
+    void genTestRoom();
+    void genFromPerlin(const unsigned int& seed);
 
 
   private:
