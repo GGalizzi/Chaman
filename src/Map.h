@@ -9,8 +9,10 @@
 
 struct Map {
   public:
-    Map();
+    Map(unsigned int, std::shared_ptr<Entity>);
     ~Map();
+    void setPlayer(std::shared_ptr<Entity>);
+    std::shared_ptr<Entity> getPlayer();
     void draw(sf::RenderWindow* window);
 
     void placeTile(std::string,int,int);
@@ -33,6 +35,8 @@ struct Map {
     Tile* tiles_;
     int width_;
     int height_;
+
+    std::shared_ptr<Entity> player_;
 
 };
 

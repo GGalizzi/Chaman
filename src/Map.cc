@@ -5,19 +5,26 @@
 #include <sstream>
 #include <iostream>
 
-Map::Map() {
+Map::Map(unsigned int seed, std::shared_ptr<Entity> player) : player_(player) {
   width_ = (Game::WindowWidth-200)/Game::SpriteSize;
   height_ = (Game::WindowHeight-100)/Game::SpriteSize;
 
   tiles_ = new Tile[width_*height_];
 
-  genFromPerlin(123229249u);
+  genFromPerlin(seed);
 }
 
 Map::~Map() {
   delete[] tiles_;
 }
 
+void Map::setPlayer(std::shared_ptr<Entity> player) {
+  player_=player;
+}
+
+std::shared_ptr<Entity> Map::getPlayer() {
+  return player_;
+}
 
 void Map::draw(sf::RenderWindow* window) {
   for (int x = 0; x < width_; x++)
@@ -130,6 +137,7 @@ void Map::genTestRoom() {
 
 void Map::genFromPerlin(const unsigned int& seed) {
   PerlinNoise pn(seed);
+  bool playerSpawned=false;
 
   for(int Y=0; Y < height_; ++Y) {
     for(int X=0; X < width_; ++X) {
@@ -140,6 +148,11 @@ void Map::genFromPerlin(const unsigned int& seed) {
 
       if(n < 0.35) {
         placeTile("wall", X,Y);
+      }
+      if (!playerSpawned) {
+        std::cout << "spawning at :" << X << ", " << Y << std::endl;
+        player_->setPosition(sf::Vector2i(4,4));
+        playerSpawned = true;
       }
     }
   }

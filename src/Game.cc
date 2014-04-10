@@ -10,6 +10,8 @@ int Game::LogViewWidth(WindowWidth*0.75f);
 int Game::LogViewHeight(WindowHeight*0.8f);
 int Game::SpriteSize{16};
 
+std::shared_ptr<Map>* Game::curMap;
+
 STATE Game::state = STATE::PLAY;
 
 std::unique_ptr<sf::Texture> Game::tex(new sf::Texture);
@@ -24,14 +26,19 @@ Game::Game() :
   window_(sf::VideoMode(WindowWidth,WindowHeight), "SFML Rogue"),
   gameView_(),
   statusView_(),
-  map_(new Map),
+  //map_(new Map(856u)),
   player_(new Entity(0,0, 1,1, "That's you", new Mob(Mob::FACTION::ALLIES, 520,5,2))),
   cursor_(new Entity(0,0, 1,1)),
   wait_(false),
-  itemInput_(false)
-{
+  itemInput_(false) {
+
   fon->loadFromFile("terminus.ttf");
   tex->loadFromFile("ascii.png");
+
+  map_.reset(new Map(856u, player_));
+  curMap = &map_;
+  //map_->setPlayer(player_);
+  
   for(int i = 0; i<8; i++) {
     //std::shared_ptr<Entity> npc(new Entity(0,1, i+5,5, "Orc", new Mob( Mob::FACTION::ORCS, 10, 3, 1)));
     std::shared_ptr<Entity> npc(new Entity("orc", i+5,5));
@@ -152,6 +159,10 @@ void Game::run() {
 
     if(state == STATE::PLAY) {
       hpText_.setString(player_->cMob->hpToString());
+      sf::Vector2i pos;
+      pos = player_->getPosition();
+      appendStringAfter(hpText_, "\nX: "+std::to_string(pos.x));
+      appendStringAfter(hpText_, "\nY: "+std::to_string(pos.y));
     }
 
     
@@ -343,4 +354,8 @@ void Game::appendStringAfter(sf::Text& text, std::string st) {
 
 void Game::log(std::string st) {
   appendString(logText_, st+"\n");
+}
+
+void Game::changeMap(std::shared_ptr<Map> newMap) {
+  *curMap = newMap;
 }

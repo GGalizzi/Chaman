@@ -25,6 +25,8 @@ struct Game {
     static std::unique_ptr<sf::Texture> tex;
     static std::unique_ptr<sf::Font> fon;
     static STATE state;
+
+    static std::shared_ptr<Map>* curMap;
     Game();
     ~Game();
 
@@ -47,6 +49,8 @@ struct Game {
     static void appendStringAfter(sf::Text& text, std::string st);
 
     static void log(std::string);
+
+    static void changeMap(std::shared_ptr<Map>);
 
     template <class type> static type readStream(std::istringstream& iss);
   private:

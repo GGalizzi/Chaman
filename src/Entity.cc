@@ -153,15 +153,24 @@ void Entity::move(int x, int y, Map* const& map, std::list<std::shared_ptr<Entit
     }
 
   }
+
+  if(dx > map->getWidth()-1 || dx < 0 || dy < 0 || dy > map->getHeight()-1) {
+    Game::log("DEBUG: Over Limit.");
+    //for outdoors
+    //Create new map.
+    //Figure out directioin player is coming from to do placement.
+    // link this new map ot the previous map in the corresponding direction.
+    std::shared_ptr<Map> newMap(new Map(81233u, map->getPlayer()));
+
+    Game::changeMap(newMap);
+    return;
+  }
+
   if ((!map->isBlocked(dx,dy) && canMove && !isMob) || Game::state == STATE::LOOK) {
 
     x_ += x;
     y_ += y;
     sprite_.move(Game::SpriteSize*x, Game::SpriteSize*y);
-
-    if(x_ > map->getWidth() || x_ < 0 || y_ < 0 || y_ > map->getHeight()) {
-      Game::log("DEBUG: Over Limit.");
-    }
 
     if (Game::state == STATE::LOOK) {
       Game::describe();
@@ -249,5 +258,3 @@ void Entity::setPosition(sf::Vector2i pos) {
   y_ = pos.y;
   sprite_.setPosition(x_*Game::SpriteSize, y_*Game::SpriteSize);
 }
-
-
