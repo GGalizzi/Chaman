@@ -2,7 +2,7 @@
 #include "Tile.h"
 
 
-Tile::Tile(sf::Color color) {
+Tile::Tile(sf::Color color) : blocks(false), isDoor(false), isLocked(false) {
   sprite_.setTexture(*Game::tex);
 
   //Floor Sprite
