@@ -37,7 +37,7 @@ Game::Game() :
 
   map_.reset(new Map(856u, player_));
   curMap = &map_;
-  //map_->setPlayer(player_);
+  /*
   
   for(int i = 0; i<8; i++) {
     //std::shared_ptr<Entity> npc(new Entity(0,1, i+5,5, "Orc", new Mob( Mob::FACTION::ORCS, 10, 3, 1)));
@@ -50,6 +50,8 @@ Game::Game() :
   }
   std::shared_ptr<Entity> key(new Entity("key", 10,10));
   items_.push_back(key);
+
+  */
 
   gameView_.setCenter(player_->posVector());
   gameView_.setSize(GameViewWidth, GameViewHeight);

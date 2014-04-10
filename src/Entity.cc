@@ -151,7 +151,6 @@ void Entity::move(int x, int y, Map* const& map, std::list<std::shared_ptr<Entit
         otherEnt = ent;
       }
     }
-
   }
 
   if(dx > map->getWidth()-1 || dx < 0 || dy < 0 || dy > map->getHeight()-1) {
@@ -160,10 +159,34 @@ void Entity::move(int x, int y, Map* const& map, std::list<std::shared_ptr<Entit
     //Create new map.
     //Figure out directioin player is coming from to do placement.
     // link this new map ot the previous map in the corresponding direction.
-    std::shared_ptr<Map> newMap(new Map(81233u, map->getPlayer()));
+    std::shared_ptr<Map> newMap(new Map(89233u, map->getPlayer()));
 
-    Game::changeMap(newMap);
-    return;
+    auto checkNewMap = [&](int x, int y) {
+      if (!newMap->isBlocked(x, y)) {
+        Game::changeMap(newMap);
+        newMap->getPlayer()->setPosition(sf::Vector2i(x, y));
+      }
+      else {
+        Game::log("That way seems to be blocked.");
+      }
+    };
+
+    if(dy < 0) {
+      checkNewMap(dx, newMap->getHeight()-1);
+      return;
+    }
+    else if(dx < 0) {
+      checkNewMap(newMap->getWidth()-1, dy);
+      return;
+    }
+    else if(dy > map->getHeight()-1) {
+      checkNewMap(dx, 0);
+      return;
+    }
+    else if(dx > map->getWidth()-1) {
+      checkNewMap(0,dy);
+      return;
+    }
   }
 
   if ((!map->isBlocked(dx,dy) && canMove && !isMob) || Game::state == STATE::LOOK) {

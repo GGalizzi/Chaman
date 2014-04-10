@@ -137,7 +137,6 @@ void Map::genTestRoom() {
 
 void Map::genFromPerlin(const unsigned int& seed) {
   PerlinNoise pn(seed);
-  bool playerSpawned=false;
 
   for(int Y=0; Y < height_; ++Y) {
     for(int X=0; X < width_; ++X) {
@@ -148,11 +147,6 @@ void Map::genFromPerlin(const unsigned int& seed) {
 
       if(n < 0.35) {
         placeTile("wall", X,Y);
-      }
-      if (!playerSpawned) {
-        std::cout << "spawning at :" << X << ", " << Y << std::endl;
-        player_->setPosition(sf::Vector2i(4,4));
-        playerSpawned = true;
       }
     }
   }
